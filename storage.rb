@@ -7,8 +7,6 @@ end
 
 class Storage
 
-  attr_accessor :root
-
   def initialize
     @root = Node.new("")
   end
@@ -17,24 +15,29 @@ class Storage
     add_key(key, @root)
   end
 
-  def print_children
-    @root.print_children
+  private
+  def add_key(key, current_node, current_index = 0)
+    if key.length == current_index
+      current_node.color = current_node.is_leaf? ? Color::BLUE : Color::GRAY
+      return
+    end
+    next_node = get_or_create_next_node(key[current_index], current_node)
+    current_node.add_child(next_node)
+    next_node.color = Color::GRAY if next_node.color == Color::BLUE
+    add_key(key, next_node, current_index + 1)
   end
 
   private
-  def add_key(key, current_node, current_index = 0)
-    key_part = key[current_index]
-    child_with_key_part = current_node.get_child_with_key key_part
-    if current_node.is_leaf? or child_with_key_part.nil?
-      new_child = Node.new(key_part)
-      current_node.add_child(new_child)
-      add_key(key, new_child, current_index + 1)
+  def get_or_create_next_node(key_item, current_node)
+    next_node = current_node.get_child_with_key key_item
+    if current_node.is_leaf? or next_node.nil?
+      next_node = Node.new(key_item)
     end
-    add_key(key, child_with_key_part, current_index + 1)
+    next_node
   end
 
   class Node
-    attr_accessor :parent, :key, :children
+    attr_accessor :parent, :color
 
     def initialize(key, color = Color::WHITE)
       @key = key
@@ -49,21 +52,8 @@ class Storage
       child
     end
 
-    def print_children
-      current_children = @children.dup
-      while current_children.length ==!  0
-        child = current_children.shift
-        puts child.key
-        current_children.push(child.children)
-      end
-    end
-
     def is_leaf?
-      @children.length === 0
-    end
-
-    def contains_child_with_key(searched_key)
-      @children.any? {|child| child.match_with_key searched_key}
+      @children.length == 0
     end
 
     def get_child_with_key(searched_key)
