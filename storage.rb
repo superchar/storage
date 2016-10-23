@@ -18,12 +18,12 @@ class Storage
   private
   def add_key(key, current_node, current_index = 0)
     if key.length == current_index
-      current_node.color = current_node.is_leaf? ? Color::BLUE : Color::GRAY
+      current_node.color = Color::BLUE if current_node.is_white?
       return
     end
     next_node = get_or_create_next_node(key[current_index], current_node)
     current_node.add_child(next_node)
-    next_node.color = Color::GRAY if next_node.color == Color::BLUE
+    next_node.color = Color::GRAY if next_node.is_blue?
     add_key(key, next_node, current_index + 1)
   end
 
@@ -56,6 +56,14 @@ class Storage
       @children.length == 0
     end
 
+    def is_white?
+      @color == Color::WHITE
+    end
+
+    def is_blue?
+      @color == Color::BLUE
+    end
+    
     def get_child_with_key(searched_key)
       @children.detect {|child| child.match_with_key searched_key}
     end
