@@ -15,6 +15,18 @@ class Storage
     add_key(key, @root)
   end
 
+  def contains?(key)
+    node = find_node(key.chars, @root)
+    node != nil and node.is_finishing_node?
+  end
+
+  private
+  def find_node(key, current_node)
+    return current_node if key.empty?
+    next_node = current_node.get_child_with_key(key.shift)
+    next_node.nil? ? nil : find_node(key, next_node)
+  end
+
   private
   def add_key(key, current_node, current_index = 0)
     if key.length == current_index
@@ -63,7 +75,15 @@ class Storage
     def is_blue?
       @color == Color::BLUE
     end
-    
+
+    def is_gray?
+      @color == Color::GRAY
+    end
+
+    def is_finishing_node?
+      is_blue? or is_gray?
+    end
+
     def get_child_with_key(searched_key)
       @children.detect {|child| child.match_with_key searched_key}
     end
