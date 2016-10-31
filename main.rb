@@ -1,7 +1,6 @@
 require './storage'
+require './loaders/key_loader'
 
-storage = Storage.new
-storage.add('hello,world!')
-storage.add('hello,world!4')
-storage.add('hello,world!6')
-test = 'test'
+storage = Storage.new ArrayKeyLoader.new(['Hello,world!', 'Bye,World!', 'Hello,World42'])
+puts storage.find('Hello')
+
