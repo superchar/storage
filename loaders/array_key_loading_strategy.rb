@@ -11,6 +11,6 @@ class ArrayKeyLoadingStrategy < KeyLoadingStrategy
   end
 
   def save_keys(keys)
-    @target_array = keys
+    @target_array.replace(keys)
   end
 end

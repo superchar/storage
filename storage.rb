@@ -7,10 +7,10 @@ end
 
 class Storage
 
-  def initialize(keys_loading_strategy = nil)
+  def initialize(loading_strategy = nil)
     @root = Node.new("")
-    unless keys_loading_strategy.nil?
-      @keys_loading_strategy = keys_loading_strategy
+    unless loading_strategy.nil?
+      @keys_loading_strategy = loading_strategy
       load_keys
     end
   end
