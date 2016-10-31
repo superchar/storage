@@ -7,10 +7,10 @@ end
 
 class Storage
 
-  def initialize(keys_loader = nil)
+  def initialize(keys_loading_strategy = nil)
     @root = Node.new("")
-    unless keys_loader.nil?
-      @keys_loader = keys_loader
+    unless keys_loading_strategy.nil?
+      @keys_loading_strategy = keys_loading_strategy
       load_keys
     end
   end
@@ -25,7 +25,16 @@ class Storage
   end
 
   def find(key_prefix)
+    key_prefix_array = key_prefix.chars
     raise ArgumentError.new('Key prefix must be longer than 2 symbols') if key_prefix.length < 3
+    starting_search_node = find_node(key_prefix_array.dup, @root)
+    key_prefix_array.pop
+    key_prefix = key_prefix_array.join
+    find_all_keys(starting_search_node).map { |key| key.prepend(key_prefix) }
+  end
+
+  def save_keys
+    @keys_loading_strategy.save_keys(find_all_keys(@root))
   end
 
   private
@@ -37,11 +46,12 @@ class Storage
       result_array.push(*child_array)
     end
     result_array.push(node.key) if node.is_gray?
+    result_array
   end
 
   private
   def load_keys
-    keys = @keys_loader.load_keys
+    keys = @keys_loading_strategy.load_keys
     keys.each {|key| add(key)}
   end
 
@@ -56,10 +66,11 @@ class Storage
   def add_key(key, current_node, current_index = 0)
     if key.length == current_index
       current_node.color = Color::BLUE if current_node.is_white?
+      current_node.color = Color::GRAY if current_node.is_blue?
       return
     end
     next_node = get_or_create_next_node(key[current_index], current_node)
-    current_node.add_child(next_node)
+    current_node.add_child(next_node) if next_node.parent.nil?
     next_node.color = Color::GRAY if next_node.is_blue?
     add_key(key, next_node, current_index + 1)
   end
@@ -67,7 +78,7 @@ class Storage
   private
   def get_or_create_next_node(key_item, current_node)
     next_node = current_node.get_child_with_key key_item
-    if current_node.is_blue? or next_node.nil?
+    if  next_node.nil?
       next_node = Node.new(key_item)
     end
     next_node

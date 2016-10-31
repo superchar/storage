@@ -1,6 +1,6 @@
 require './storage'
-require './loaders/key_loader'
+require './loaders/zip_file_key_loading_strategy'
 
-storage = Storage.new ArrayKeyLoader.new(['Hello,world!', 'Bye,World!', 'Hello,World42'])
-puts storage.find('Hello')
-
+storage = Storage.new(ZipFileKeyLoadingStrategy.new('./test_files/keys.zip', 'keys.txt'))
+storage.add('vladislav1!')
+storage.save_keys
