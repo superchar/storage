@@ -54,14 +54,14 @@ class Storage
   private
   def find_node(key, current_node)
     return current_node if key.empty?
-    next_node = current_node.get_child_with_key(key.shift)
+    next_node = current_node.get_child_by_key(key.shift)
     next_node.nil? ? nil : find_node(key, next_node)
   end
 
   private
   def add_key(key, current_node)
     if key.empty?
-      update_last_searching_node current_node
+      update_last_searching_node(current_node)
     else
       next_node = get_or_create_next_node(key.shift, current_node)
       current_node.add_child(next_node) if next_node.parent.nil?
@@ -81,7 +81,7 @@ class Storage
 
   private
   def get_or_create_next_node(key_item, current_node)
-    next_node = current_node.get_child_with_key key_item
+    next_node = current_node.get_child_by_key(key_item)
     if next_node.nil?
       next_node = Node.new(key_item)
     end
@@ -99,7 +99,7 @@ class Storage
     end
 
     def add_child(child)
-      @children.push child
+      @children.push(child)
       child.parent = self
       child
     end
@@ -120,7 +120,7 @@ class Storage
       is_blue? or is_gray?
     end
 
-    def get_child_with_key(searched_key)
+    def get_child_by_key(searched_key)
       @children.detect {|child| child.key == searched_key}
     end
 
