@@ -1,5 +1,5 @@
 require_relative './test_helper'
-require_relative '../loaders/file_key_loading_strategy'
+require 'storage/loaders/file_key_loading_strategy'
 
 class TestFileLoadingStrategyTest < MiniTest::Test
   def setup

@@ -1,4 +1,4 @@
-require '../loaders/key_loading_strategy'
+require_relative './key_loading_strategy'
 
 class ArrayKeyLoadingStrategy < KeyLoadingStrategy
 

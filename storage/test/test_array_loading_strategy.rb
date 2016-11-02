@@ -1,5 +1,5 @@
 require_relative './test_helper'
-require_relative '../loaders/array_key_loading_strategy'
+require 'storage/loaders/array_key_loading_strategy'
 
 class TestArrayLoadingStrategy < MiniTest::Test
 

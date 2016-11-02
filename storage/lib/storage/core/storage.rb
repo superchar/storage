@@ -6,7 +6,6 @@ module Color
 end
 
 class Storage
-
   def initialize(loading_strategy = nil)
     @root = Node.new('')
     unless loading_strategy.nil?
