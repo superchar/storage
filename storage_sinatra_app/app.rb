@@ -1,14 +1,6 @@
 require 'sinatra'
 require 'json'
-require_relative '../storage_app/storage'
-require './storage_mixins'
-
-
-before do
-  if request.request_method == "POST"
-    params.merge!(JSON.parse(request.body.read))
-  end
-end
+require 'storage'
 
 def fail(message, http_status = 400)
   status http_status
@@ -25,8 +17,9 @@ def success(data: nil?, http_status: 200)
 end
 
 post '/keys' do
-  if params.has_key? 'key'
-    Storage.instance.add(params['key'])
+  parameters = JSON.parse(request.body.read)
+  if parameters.has_key? 'key'
+    Storage.instance.add(parameters['key'])
     success(http_status: 201)
   else
     fail('Key was not provided')
