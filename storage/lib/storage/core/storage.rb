@@ -6,6 +6,9 @@ module Color
 end
 
 class Storage
+
+  attr_writer :keys_loading_strategy
+
   def initialize(loading_strategy = nil)
     @root = Node.new('')
     unless loading_strategy.nil?
@@ -32,8 +35,19 @@ class Storage
   end
 
   def save_keys
-    raise Exception.new('Keys loading strategy object was not provided') if @keys_loading_strategy.nil?
+    check_key_strategy_presence
     @keys_loading_strategy.save_keys(find_all_keys(@root))
+  end
+
+  def load_keys
+    check_key_strategy_presence
+    keys = @keys_loading_strategy.load_keys
+    keys.each {|key| add(key)}
+  end
+
+  private
+  def check_key_strategy_presence
+    raise Exception.new('Keys loading strategy object was not provided') if @keys_loading_strategy.nil?
   end
 
   private
@@ -42,12 +56,6 @@ class Storage
     keys = node.children.map { |child| find_all_keys(child) }.flatten.map { |child_key| node.key + child_key }
     keys.push(node.key) if node.is_gray?
     keys
-  end
-
-  private
-  def load_keys
-    keys = @keys_loading_strategy.load_keys
-    keys.each {|key| add(key)}
   end
 
   private

@@ -1,4 +1,4 @@
-require 'zip'
+require 'zippy'
 require_relative  './file_key_loading_strategy'
 
 class ZipFileKeyLoadingStrategy < FileKeyLoadingStrategy
@@ -10,19 +10,16 @@ class ZipFileKeyLoadingStrategy < FileKeyLoadingStrategy
 
   protected
   def load_file_content
-    open_zip_file.read(@file_name)
+    open_zip_file[@file_name]
   end
 
   protected
   def save_file_content(content)
-    open_zip_file.get_output_stream(@file_name)  do |file|
-      file.write content
-    end
+    open_zip_file[@file_name] = content
   end
 
   private
   def open_zip_file
-    Zip::File.open(@zip_file_name)
+    Zippy.open(@zip_file_name)
   end
-
 end

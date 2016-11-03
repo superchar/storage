@@ -1,6 +1,6 @@
 require 'drb'
-require_relative '../../storage_app/storage'
-require_relative '../../storage_app/extensions/singleton'
+require 'storage/core/storage'
+require 'storage/extensions/singleton'
 
 class Server
   def start

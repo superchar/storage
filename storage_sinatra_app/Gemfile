@@ -1,4 +1,4 @@
 source 'http://rubygems.org' # I faced lot of trobules with ssl error when trying to use https protocol for install gems.
-gem 'storage', '0.1.0'
+gem 'storage', :path => '../storage'
 gem 'sinatra'
 gem 'json'

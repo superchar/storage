@@ -22,13 +22,14 @@ Gem::Specification.new do |spec|
       "public gem pushes."
   end
 
-  spec.files         = ['lib/storage.rb', 'lib/storage/version.rb', 'lib/storage/hello.rb']
-  puts spec.files
+  spec.files         = Dir['*.md', 'bin/*', 'lib/**/*.rb']
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "minitest"  
+  spec.add_development_dependency "minitest", "5.9.1"
+  spec.add_development_dependency "simplecov", "0.12.0"
+  spec.add_dependency "zippy", "0.2.3"
 end
