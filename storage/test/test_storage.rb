@@ -1,7 +1,7 @@
 require_relative './test_helper'
 require 'storage/core/storage'
 
-class StorageTest < MiniTest::Test
+class TestStorage < MiniTest::Test
   def setup
     @storage = Storage.new
   end
