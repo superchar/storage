@@ -1,7 +1,7 @@
 require_relative './test_helper'
 require 'storage/loaders/array_key_loading_strategy'
 
-class TestArrayLoadingStrategy < MiniTest::Test
+class ArrayLoadingStrategyTest < MiniTest::Test
 
   def setup
     @target_array = %w(Hello-world! Vladislav, Hello,world!!)
